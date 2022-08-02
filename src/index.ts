@@ -1,12 +1,14 @@
-import { User } from './models/User';
+import { Collection } from './models/Collection';
 
-const user = new User({ name: "new record" id: 1 });
+const collection  = new Collection('http://localhost:3000/users')
 
-const on = user.on;
+collection.on('change', () => {
+  console.log(collection);
 
-user.on('change', () => {
+})
 
-});
+collection.fetch();
+
 
 //this retunrs on function from the events class
 //when we refrence user.on we are getting back a reference to on method on eventing class
