@@ -1,13 +1,14 @@
 import axios, { AxiosResponse } from 'axios';
-
-import { User, UserProps } from './User';
 import { Eventing } from './Eventing';
 
-export class Collection {
-  models: User[] = [];
+export class Collection<T, K> {
+  models: T[] = [];
   events: Eventing = new Eventing();
 
-  constructor(public rootUrl: string) {}
+  constructor(
+    public rootUrl: string,
+    public deserialize: (json: K) => T
+  ) {}
 
   get on() {
     return this.events.on;
@@ -18,13 +19,14 @@ export class Collection {
   }
 
   fetch(): void {
-    axios.get(this.rootUrl).then((response: AxiosResponse)
-      response.data.forEach((value: UserProps) => {
-        const user = User.buildUser(value);
-        this.models.push(user)
+    axios.get(this.rootUrl).then((response: AxiosResponse) => {
+      response.data.forEach((value: K) => {
+        this.models.push(this.deserialize(value));
       });
 
       this.trigger('change');
     });
   }
 }
+
+//K is User Props or a generic

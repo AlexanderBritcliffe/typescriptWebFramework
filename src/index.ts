@@ -1,14 +1,7 @@
-import { Collection } from './models/Collection';
+import { UserForm } from './views/UserForm';
 
-const collection  = new Collection('http://localhost:3000/users')
+const userForm = new UserForm(
+  document.getElementById('root')
+);
 
-collection.on('change', () => {
-  console.log(collection);
-
-})
-
-collection.fetch();
-
-
-//this retunrs on function from the events class
-//when we refrence user.on we are getting back a reference to on method on eventing class
+userForm.render();
